@@ -540,77 +540,62 @@
 </div>
 
 {% stylesheet %}
+  /* Hero — editorial full-viewport */
   .hero {
-    /* Bécane Paris BRUTALIST HERO */
-    --hero-min-height: 90vh;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    background-color: var(--color-background) !important;
-    border: 1px solid var(--color-grid-line) !important;
-    border-top: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    overflow: visible !important;
+    --hero-min-height: 100svh;
     position: relative !important;
-  }
-
-  .hero__content {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    width: 100% !important;
-    height: 100% !important;
-    text-align: center !important;
-    padding: 0 !important;
+    overflow: hidden !important;
+    border: none !important;
     margin: 0 !important;
   }
 
-  .hero h1, .hero .h1 {
-    font-family: var(--font-heading-family) !important;
-    font-size: clamp(5rem, 25vw, 15rem) !important;
-    line-height: 0.78 !important;
-    text-transform: uppercase !important;
-    letter-spacing: -0.04em !important;
-    font-weight: 950 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    color: var(--color-foreground) !important;
-    z-index: 5 !important;
-  }
-
-  .hero p, .hero .paragraph {
-    font-family: var(--font-body-family) !important;
-    font-size: 13px !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.3em !important;
-    font-weight: 900 !important;
-    margin: 40px 0 0 0 !important;
-    opacity: 0.9 !important;
-  }
-
-  /* Cutout Image Style */
-  .hero__media {
+  .hero__content,
+  .hero__content-wrapper {
     position: absolute !important;
-    top: 50% !important;
-    left: 50% !important;
-    transform: translate(-50%, -50%) !important;
-    width: auto !important;
-    height: 90% !important;
-    object-fit: contain !important;
-    z-index: 2 !important;
-    mix-blend-mode: multiply; /* Helps with background removal if not PNG */
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    padding: 4rem 5vw !important;
+    z-index: 3 !important;
+    text-align: left !important;
+    align-items: flex-start !important;
+    justify-content: flex-end !important;
   }
 
-  /* Snappy Snappy Reveal */
-  .hero-reveal {
-     animation: brutalReveal 0.6s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
+  .hero h1, .hero .h1, .hero__heading {
+    font-family: var(--font-heading-family) !important;
+    font-size: clamp(3rem, 8vw, 8rem) !important;
+    font-weight: 400 !important;
+    line-height: 1.0 !important;
+    letter-spacing: -0.02em !important;
+    text-transform: none !important;
+    transform: none !important;
+    color: #fff !important;
+    margin: 0 0 1rem 0 !important;
   }
 
-  @keyframes brutalReveal {
-    from { opacity: 0; transform: translateY(50px) scale(0.95); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
+  .hero p, .hero .paragraph, .hero__subheading {
+    font-family: var(--font-body-family) !important;
+    font-size: 0.65rem !important;
+    letter-spacing: 0.22em !important;
+    text-transform: uppercase !important;
+    font-weight: 400 !important;
+    color: rgba(255,255,255,0.75) !important;
+    margin: 0 !important;
+  }
+
+  /* Gradient overlay for text legibility */
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 60%);
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .hero__media-wrapper {
+    z-index: 0 !important;
   }
 {% endstylesheet %}
 

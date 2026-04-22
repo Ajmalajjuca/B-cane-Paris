@@ -1,43 +1,84 @@
 /**
- * Bécane Paris Animations & Interactions
- * Implements IntersectionObserver for fade-ins and scroll-triggered header background.
+ * Bécane Paris — Editorial Animations
+ * Fade-in on scroll · transparent header · smooth page entry
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Bécane Paris Brutalist Animations
-  const revealElements = document.querySelectorAll('.grid-box, .product-card, .hero h1, .media-block, .reveal');
-  
+
+  // ── 1. Scroll fade-in via IntersectionObserver ──────────────
+  const revealTargets = document.querySelectorAll(
+    '.product-card, .media-with-content, .hero__content, ' +
+    '.section, .footer-content, .reveal, [data-reveal]'
+  );
+
   const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('is-visible');
-        // No unobserve if we want them to re-reveal, but usually once is enough
         revealObserver.unobserve(entry.target);
       }
     });
   }, {
-    threshold: 0.01, // Reveal almost instantly
-    rootMargin: '0px'
+    threshold: 0.08,
+    rootMargin: '0px 0px -40px 0px'
   });
 
-  revealElements.forEach(el => revealObserver.observe(el));
+  revealTargets.forEach(el => {
+    if (!el.classList.contains('is-visible')) {
+      el.classList.add('reveal');
+      revealObserver.observe(el);
+    }
+  });
 
-  // Header Scroll Compact
-  const header = document.querySelector('.header');
+  // ── 2. Header: show background after 80px scroll ────────────
+  const header = document.querySelector('header-component, .header');
   if (header) {
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 40) {
-        header.classList.add('header--scrolled');
+    const SCROLL_THRESHOLD = 80;
+    let ticking = false;
+
+    const updateHeader = () => {
+      if (window.scrollY > SCROLL_THRESHOLD) {
+        header.classList.add('is-scrolled');
       } else {
-        header.classList.remove('header--scrolled');
+        header.classList.remove('is-scrolled');
+      }
+      ticking = false;
+    };
+
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        window.requestAnimationFrame(updateHeader);
+        ticking = true;
       }
     }, { passive: true });
   }
 
-  // 3. Simple page opacity transition
+  // ── 3. Smooth page entry ────────────────────────────────────
   document.body.style.opacity = '0';
-  document.body.style.transition = 'opacity 0.6s ease';
+  document.body.style.transition = 'opacity 0.5s ease';
   window.requestAnimationFrame(() => {
     document.body.style.opacity = '1';
   });
+
+  // ── 4. Hero headline fade-up on load ────────────────────────
+  const heroHeading = document.querySelector('.hero h1, .hero__heading, .hero .heading');
+  if (heroHeading) {
+    heroHeading.style.opacity = '0';
+    heroHeading.style.transform = 'translateY(32px)';
+    heroHeading.style.transition = 'opacity 1s ease 0.3s, transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s';
+    window.requestAnimationFrame(() => {
+      heroHeading.style.opacity = '1';
+      heroHeading.style.transform = 'translateY(0)';
+    });
+  }
+
+  const heroSub = document.querySelector('.hero .subheading, .hero__subheading, .hero p');
+  if (heroSub) {
+    heroSub.style.opacity = '0';
+    heroSub.style.transition = 'opacity 0.9s ease 0.65s';
+    window.requestAnimationFrame(() => {
+      heroSub.style.opacity = '1';
+    });
+  }
+
 });

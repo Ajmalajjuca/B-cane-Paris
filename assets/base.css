@@ -13,102 +13,77 @@ body {
 }
 
 :root {
-  /* Bécane Paris Palette */
+  /* Bécane Paris — Editorial Palette */
   --color-background: #f5f2ee;
   --color-foreground: #1a1a18;
-  --color-border: #1a1a18;
-  --color-grid-line: #1a1a18;
+  --color-border: #d8d3cc;
+  --color-accent: #c8a882;
 
-  /* Bécane Paris Typography (Brutalist) */
-  --font-heading-family: 'Archivo Black', sans-serif;
-  --font-body-family: 'Inter', sans-serif;
+  /* Bécane Paris — Typography */
+  --font-heading-family: 'Playfair Display', Georgia, serif;
+  --font-body-family: 'DM Sans', system-ui, sans-serif;
 
-  /* Overriding original variables */
   --color-foreground-rgb: 26 26 24;
   --color-background-rgb: 245 242 238;
 
-  --hover-transition-duration: 0.3s;
-  --hover-transition-timing: cubic-bezier(0.1, 0.9, 0.2, 1);
+  --hover-transition-duration: 0.4s;
+  --hover-transition-timing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
-  /* Force Zero Border Radius (Industrial) */
+  /* Soft border radius — editorial feel */
   --style-border-radius: 0px;
   --style-border-radius-buttons-primary: 0px;
   --style-border-radius-inputs: 0px;
   --style-border-radius-cards: 0px;
 
-  --font-heading--weight: 900;
-  --font-body--weight: 400;
-  --font-nav--weight: 900;
+  --font-heading--weight: 400;
+  --font-body--weight: 300;
 }
 
-/* Brutalist Grid Utility */
-.grid-box {
-  border: 1px solid var(--color-grid-line);
-  background-color: var(--color-background);
-}
-
-.no-gutters {
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-/* Global Reset for Grid Aesthetic */
-* {
-  border-radius: 0 !important;
-}
-
-/* Global Typography Overrides */
-body, input, textarea, select, .paragraph {
-  font-family: var(--font-body-family) !important;
-  color: var(--color-foreground) !important;
+/* Global Typography */
+body, input, textarea, select {
+  font-family: var(--font-body-family);
+  font-weight: 300;
+  color: var(--color-foreground);
   background-color: var(--color-background);
   -webkit-font-smoothing: antialiased;
+  letter-spacing: 0.01em;
 }
 
 h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
-  font-family: var(--font-heading-family) !important;
-  text-transform: uppercase;
-  letter-spacing: 0.15em !important;
-  font-weight: 900 !important;
-  color: var(--color-foreground) !important;
-  display: inline-block !important;
-  transform: scaleX(1.2) !important;
-  transform-origin: left !important;
-  line-height: 0.8 !important;
+  font-family: var(--font-heading-family);
+  font-weight: 400;
+  color: var(--color-foreground);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
 }
 
-/* Minimal Link Hover Animation */
-a:not(.button) {
+/* Editorial link — thin underline on hover */
+a:not(.button):not(.no-underline) {
   position: relative;
   text-decoration: none;
   transition: opacity 0.3s ease;
-  text-transform: uppercase;
-  font-family: var(--font-body-family);
-  letter-spacing: 0.1em;
-  font-weight: 700;
-  font-size: 13px;
 }
 
-a:not(.button)::after {
+a:not(.button):not(.no-underline)::after {
   content: '';
   position: absolute;
-  bottom: -2px;
+  bottom: -1px;
   left: 0;
   width: 0;
   height: 1px;
   background-color: currentColor;
-  transition: width 0.3s ease;
+  transition: width 0.4s ease;
 }
 
-a:not(.button):hover::after {
+a:not(.button):not(.no-underline):hover::after {
   width: 100%;
 }
 
-/* Scroll Fade-in Animation */
+/* Scroll fade-in */
 .reveal {
   opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transform: translateY(24px);
+  transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .reveal.is-visible {
@@ -4306,57 +4281,32 @@ product-recommendations:has([data-has-recommendations='false']) {
   }
 }
 
-/* Bécane Paris Technical Precision Grid */
+/* Bécane Paris — Editorial Product Cards */
 .product-card {
-  background-color: var(--color-background) !important;
-  border-right: 1px solid var(--color-grid-line) !important;
-  border-bottom: 1px solid var(--color-grid-line) !important;
-  transition: opacity 0.3s ease;
-  height: 100% !important;
-  width: 100% !important;
-  margin: 0 !important;
-  position: relative !important;
-  counter-increment: product-index;
+  background-color: var(--color-background);
+  border: none !important;
+  transition: none;
+  position: relative;
 }
 
-/* Product Index (01, 02...) */
 .product-card::before {
-  content: counter(product-index, decimal-leading-zero);
-  position: absolute;
-  bottom: 15px;
-  left: 15px;
-  font-family: var(--font-body-family);
-  font-size: 10px;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--color-foreground);
-  z-index: 10;
-}
-
-.resource-list, .grid, .product-grid-container {
-  gap: 0 !important;
-  --gap: 0 !important;
-  display: grid !important;
-  grid-template-columns: repeat(6, 1fr) !important; /* Force 6 Columns */
-  counter-reset: product-index;
-  border-top: 1px solid var(--color-grid-line);
-  border-left: 1px solid var(--color-grid-line);
+  display: none !important;
 }
 
 .product-card__gallery {
   position: relative;
   overflow: hidden;
-  aspect-ratio: 1/1 !important;
-  border-bottom: 1px solid var(--color-grid-line);
+  aspect-ratio: 3 / 4 !important;
+  border: none;
+  background: #eee8e0;
 }
 
 .product-card__gallery img {
-  object-fit: contain !important; /* Catalog style often uses contain for clean edges */
+  object-fit: cover !important;
   width: 100% !important;
   height: 100% !important;
-  padding: 10%; /* Breathing room within cell */
-  transition: transform 0.8s cubic-bezier(0.1, 0.9, 0.2, 1);
+  padding: 0 !important;
+  transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .product-card:hover .product-card__gallery img {
@@ -4364,56 +4314,56 @@ product-recommendations:has([data-has-recommendations='false']) {
 }
 
 .product-card__info {
-  padding: 1.5rem !important;
+  padding: 0.75rem 0 !important;
   background: transparent !important;
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: flex-end !important;
-  align-items: flex-end !important; /* Meta to the right */
-  position: absolute !important;
-  bottom: 0;
-  right: 0;
-  width: 100%;
-  pointer-events: none;
+  position: static !important;
+  pointer-events: auto;
 }
 
 .product-card__title {
-  font-family: var(--font-body-family) !important;
-  font-size: 10px !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.15em !important;
-  font-weight: 900 !important;
-  margin: 0 !important;
+  font-family: var(--font-heading-family) !important;
+  font-size: 0.9rem !important;
+  font-weight: 400 !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  margin: 0 0 0.2rem 0 !important;
   color: var(--color-foreground) !important;
-  text-align: right;
+  text-align: left;
 }
 
 .price {
   font-family: var(--font-body-family) !important;
-  font-size: 10px !important;
-  font-weight: 400 !important;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  text-align: right;
+  font-size: 0.8rem !important;
+  font-weight: 300 !important;
+  text-transform: none;
+  letter-spacing: 0.04em;
+  text-align: left;
+  color: var(--color-foreground) !important;
 }
 
-/* Horizontal Scroll for Featured Collection on Mobile */
+/* Grid: no borders, clean spacing */
+.resource-list, .grid, .product-grid-container {
+  border: none !important;
+  counter-reset: none;
+}
+
+/* Mobile: horizontal scroll for featured collection */
 @media screen and (max-width: 749px) {
-  .resource-list, .grid {
-    grid-template-columns: repeat(2, 1fr) !important; /* 2 col on mobile */
-  }
-  
   .resource-list--mobile-carousel {
     display: flex !important;
     overflow-x: auto !important;
     scroll-snap-type: x mandatory !important;
-    gap: 0 !important;
+    gap: 0.75rem !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
   }
 
+  .resource-list--mobile-carousel::-webkit-scrollbar { display: none; }
+
   .resource-list--mobile-carousel .resource-list__item {
-    flex: 0 0 70% !important;
+    flex: 0 0 72% !important;
     scroll-snap-align: start !important;
-    border-right: 1px solid var(--color-grid-line);
+    border: none !important;
   }
 }
 
