@@ -5,15 +5,8 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   // 1. Reveal animations on scroll
-  const revealElements = document.querySelectorAll('.reveal, .hero h1, .hero h2, .hero p, .media-block');
+  const revealElements = document.querySelectorAll('.reveal, .hero h1, .media-block, .product-card');
   
-  // Add .reveal class if not present for basic fade-ins
-  document.querySelectorAll('.section, .product-card').forEach(el => {
-    if (!el.classList.contains('hero')) {
-      el.classList.add('reveal');
-    }
-  });
-
   const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -22,17 +15,18 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }, {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
+    threshold: 0.05,
+    rootMargin: '0px 0px -20px 0px'
   });
 
-  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+  revealElements.forEach(el => revealObserver.observe(el));
 
-  // 2. Header scroll background
-  const header = document.querySelector('.header-section');
+  // 2. Header scroll behavior - already handled by CSS grid borders mostly,
+  // but we can add a 'compact' trigger if needed.
+  const header = document.querySelector('.header');
   if (header) {
     window.addEventListener('scroll', () => {
-      if (window.scrollY > 80) {
+      if (window.scrollY > 50) {
         header.classList.add('header--scrolled');
       } else {
         header.classList.remove('header--scrolled');

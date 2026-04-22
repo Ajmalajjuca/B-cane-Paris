@@ -415,43 +415,55 @@
   }
 
   .header {
-    /* Bécane Paris Header Styles */
-    --header-padding: 1.5rem;
-    --font-paragraph--line-height: 1;
-    --header-content-transition-timing: 0.3s ease;
+    /* Bécane Paris Industrial Grid Header */
+    display: grid !important;
+    grid-template-columns: 2fr 1fr 1fr; /* Custom grid proportions */
+    background: var(--color-background) !important;
+    border-bottom: 1px solid var(--color-grid-line) !important;
+    padding: 0 !important;
+    height: auto !important;
 
-    display: block;
-    contain: layout style;
-    background: transparent !important;
-    border: none !important;
+    .header__column {
+      border-right: 1px solid var(--color-grid-line);
+      padding: 1.5rem !important;
+      display: flex;
+      align-items: center;
+    }
 
+    .header__column:last-child {
+      border-right: none;
+      justify-content: flex-end;
+    }
+
+    /* Logo Branding */
+    .header__logo {
+      font-family: var(--font-heading-family) !important;
+      font-size: 1.5rem !important;
+      font-style: italic;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Nav Links */
     a:not(.button),
     .header-actions__action {
       font-family: var(--font-body-family) !important;
-      font-size: 0.75rem !important;
-      letter-spacing: 0.1em !important;
+      font-size: 0.8125rem !important;
+      font-weight: 700 !important;
       text-transform: uppercase !important;
-      transition: color 0.3s ease, border-color 0.3s ease;
+      letter-spacing: 0.15em !important;
       color: var(--color-foreground) !important;
     }
 
-    /* Remove default shadow/background */
-    .header__underlay-closed, .header__underlay-open {
-       background: transparent !important;
-       box-shadow: none !important;
-    }
-
-    svg {
-      width: 1.25rem;
-      height: 1.25rem;
+    .header-actions {
+      gap: 2rem !important;
     }
   }
 
-  /* Scrolled state (for JS logic we will add later) */
+  /* Scrolled behavior stays simple */
   .header--scrolled {
-    background-color: var(--color-background) !important;
-    border-bottom: 1px solid var(--color-border) !important;
-    transition: background-color 0.4s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
   }
 
 
