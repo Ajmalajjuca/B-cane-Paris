@@ -1,0 +1,569 @@
+{% comment %}
+  Bécane Paris — 360° Green Screen Product Spin
+  Plays a green-screen product video through a canvas chroma-key shader.
+  The green background is removed in real-time → product floats on white.
+  Drag left/right to scrub through the spin manually.
+{% endcomment %}
+
+<div
+  class="product-spin-section"
+  data-green-r="{{ section.settings.chroma_r }}"
+  data-green-g="{{ section.settings.chroma_g }}"
+  data-green-b="{{ section.settings.chroma_b }}"
+  data-tolerance="{{ section.settings.chroma_tolerance }}"
+  data-softness="{{ section.settings.chroma_softness }}"
+  id="product-spin-{{ section.id }}"
+>
+  <div class="product-spin__inner">
+
+    {%- if section.settings.heading != blank -%}
+      <div class="product-spin__header">
+        {%- if section.settings.label != blank -%}
+          <span class="product-spin__label">{{ section.settings.label }}</span>
+        {%- endif -%}
+        <h2 class="product-spin__heading">{{ section.settings.heading }}</h2>
+        {%- if section.settings.subheading != blank -%}
+          <p class="product-spin__sub">{{ section.settings.subheading }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="product-spin__stage">
+
+      {%- if section.settings.product_video != blank -%}
+        {%- liquid
+          assign video_url = section.settings.product_video
+        -%}
+        <video
+          id="spin-source-{{ section.id }}"
+          class="product-spin__source-video"
+          src="{{ video_url }}"
+          loop
+          muted
+          playsinline
+          preload="auto"
+          crossorigin="anonymous"
+        ></video>
+      {%- elsif section.settings.product_video_url != blank -%}
+        <video
+          id="spin-source-{{ section.id }}"
+          class="product-spin__source-video"
+          src="{{ section.settings.product_video_url }}"
+          loop
+          muted
+          playsinline
+          preload="auto"
+          crossorigin="anonymous"
+        ></video>
+      {%- else -%}
+        <div class="product-spin__placeholder">
+          <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="60" cy="60" r="58" stroke="#e8e8e8" stroke-width="2"/>
+            <path d="M45 42L80 60L45 78V42Z" fill="#e8e8e8"/>
+            <text x="60" y="100" text-anchor="middle" font-size="9" fill="#888" font-family="Space Grotesk,sans-serif" letter-spacing="2">ADD VIDEO</text>
+          </svg>
+          <p>Upload your 360° green screen video<br>in the theme editor</p>
+        </div>
+      {%- endif -%}
+
+      <canvas
+        id="spin-canvas-{{ section.id }}"
+        class="product-spin__canvas"
+        aria-label="{{ section.settings.heading | escape }}"
+      ></canvas>
+
+      {%- if section.settings.show_drag_hint -%}
+        <div class="product-spin__hint" id="spin-hint-{{ section.id }}">
+          <svg width="40" height="20" viewBox="0 0 40 20"><path d="M5 10H35M5 10L12 4M5 10L12 16M35 10L28 4M35 10L28 16" stroke="#888" stroke-width="1.5"/></svg>
+          <span>drag to rotate</span>
+        </div>
+      {%- endif -%}
+
+    </div>
+
+    {%- if section.settings.cta_label != blank and section.settings.cta_url != blank -%}
+      <div class="product-spin__cta">
+        <a href="{{ section.settings.cta_url }}" class="product-spin__cta-link">
+          {{ section.settings.cta_label }}
+        </a>
+      </div>
+    {%- endif -%}
+
+  </div>
+</div>
+
+{% stylesheet %}
+  .product-spin-section {
+    background: #ffffff;
+    padding: 6rem 0;
+    overflow: hidden;
+  }
+
+  .product-spin__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+  }
+
+  /* Header */
+  .product-spin__header {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .product-spin__label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #888;
+    font-weight: 400;
+  }
+
+  .product-spin__heading {
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-size: clamp(2rem, 5vw, 4.5rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    line-height: 0.95;
+    color: #0a0a0a;
+    margin: 0;
+  }
+
+  .product-spin__sub {
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: #888;
+    max-width: 400px;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* Stage — where the canvas lives */
+  .product-spin__stage {
+    position: relative;
+    width: 100%;
+    max-width: 720px;
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .product-spin__stage:active { cursor: grabbing; }
+
+  /* Hidden source video — never shown to user */
+  .product-spin__source-video {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    width: 1px;
+    height: 1px;
+    top: -9999px;
+  }
+
+  /* The canvas is what the user actually sees */
+  .product-spin__canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    mix-blend-mode: normal;
+    transition: opacity 0.4s ease;
+  }
+
+  .product-spin__canvas.is-loading { opacity: 0; }
+
+  /* Placeholder when no video is set */
+  .product-spin__placeholder {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    border: 1px dashed #e8e8e8;
+  }
+
+  .product-spin__placeholder svg {
+    width: 80px;
+    height: 80px;
+  }
+
+  .product-spin__placeholder p {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.75rem;
+    color: #888;
+    text-align: center;
+    letter-spacing: 0.04em;
+    line-height: 1.6;
+  }
+
+  /* Drag hint */
+  .product-spin__hint {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    opacity: 1;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+  }
+
+  .product-spin__hint.is-hidden { opacity: 0; }
+
+  .product-spin__hint span {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #888;
+  }
+
+  /* CTA */
+  .product-spin__cta {
+    text-align: center;
+  }
+
+  .product-spin__cta-link {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #0a0a0a;
+    border-bottom: 1px solid #0a0a0a;
+    padding-bottom: 2px;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+    display: inline-block;
+  }
+
+  .product-spin__cta-link:hover { opacity: 0.5; }
+
+  @media screen and (max-width: 749px) {
+    .product-spin-section { padding: 4rem 0; }
+    .product-spin__inner { padding: 0 1.5rem; gap: 2rem; }
+  }
+{% endstylesheet %}
+
+<script>
+(function () {
+  'use strict';
+
+  const section = document.getElementById('product-spin-{{ section.id }}');
+  if (!section) return;
+
+  const canvas  = document.getElementById('spin-canvas-{{ section.id }}');
+  const video   = document.getElementById('spin-source-{{ section.id }}');
+  const hint    = document.getElementById('spin-hint-{{ section.id }}');
+  if (!canvas || !video) return;
+
+  const ctx = canvas.getContext('2d', { willReadFrequently: true });
+
+  // ── Chroma key config from section settings ────────────────
+  const CR  = parseInt(section.dataset.greenR, 10);
+  const CG  = parseInt(section.dataset.greenG, 10);
+  const CB  = parseInt(section.dataset.greenB, 10);
+  const TOL = parseInt(section.dataset.tolerance, 10);
+  const SOFT = parseInt(section.dataset.softness, 10);
+
+  // ── State ──────────────────────────────────────────────────
+  let animFrame  = null;
+  let isDragging = false;
+  let dragStartX = 0;
+  let videoPaused = false;
+  let hintShown  = true;
+  let dragMoved  = false;
+
+  // ── Resize canvas to match video dimensions ────────────────
+  function syncCanvasSize() {
+    if (video.videoWidth && video.videoHeight) {
+      canvas.width  = video.videoWidth;
+      canvas.height = video.videoHeight;
+    } else {
+      canvas.width  = 1080;
+      canvas.height = 1080;
+    }
+    canvas.classList.remove('is-loading');
+  }
+
+  // ── Chroma key: remove green, keep subject ─────────────────
+  function chromaKey(imageData) {
+    const d = imageData.data;
+    for (let i = 0; i < d.length; i += 4) {
+      const r = d[i], g = d[i + 1], b = d[i + 2];
+
+      // Distance from chroma colour in RGB space
+      const dist = Math.sqrt(
+        (r - CR) ** 2 + (g - CG) ** 2 + (b - CB) ** 2
+      );
+
+      if (dist < TOL) {
+        d[i + 3] = 0; // fully transparent
+      } else if (dist < TOL + SOFT) {
+        // feather edge
+        d[i + 3] = Math.round(((dist - TOL) / SOFT) * 255);
+      }
+    }
+    return imageData;
+  }
+
+  // ── Main render loop ───────────────────────────────────────
+  function render() {
+    if (!video.paused && !video.ended) {
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      const frame = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      ctx.putImageData(chromaKey(frame), 0, 0);
+    }
+    animFrame = requestAnimationFrame(render);
+  }
+
+  // ── Drag-to-scrub ──────────────────────────────────────────
+  // Converts drag distance → video time (full swipe = full loop)
+  function onDragStart(clientX) {
+    isDragging = true;
+    dragStartX = clientX;
+    dragMoved  = false;
+    if (!videoPaused) {
+      video.pause();
+      videoPaused = true;
+    }
+  }
+
+  function onDragMove(clientX) {
+    if (!isDragging) return;
+    dragMoved = true;
+    const delta    = clientX - dragStartX;
+    const stageW   = canvas.getBoundingClientRect().width;
+    const duration = video.duration || 1;
+    // Full swipe across the stage = one full video duration
+    const timeShift = (delta / stageW) * duration;
+    let newTime = video.currentTime - timeShift * 0.6;
+    newTime = ((newTime % duration) + duration) % duration; // wrap
+    video.currentTime = newTime;
+    dragStartX = clientX;
+
+    // Hide hint after first drag
+    if (hint && hintShown) {
+      hint.classList.add('is-hidden');
+      hintShown = false;
+    }
+  }
+
+  function onDragEnd() {
+    if (!isDragging) return;
+    isDragging  = false;
+    videoPaused = false;
+    video.play().catch(() => {});
+  }
+
+  // Mouse
+  canvas.addEventListener('mousedown', e => { e.preventDefault(); onDragStart(e.clientX); });
+  window.addEventListener('mousemove', e => { if (isDragging) onDragMove(e.clientX); });
+  window.addEventListener('mouseup',   () => onDragEnd());
+
+  // Touch
+  canvas.addEventListener('touchstart', e => { onDragStart(e.touches[0].clientX); }, { passive: true });
+  canvas.addEventListener('touchmove',  e => { onDragMove(e.touches[0].clientX); },  { passive: true });
+  canvas.addEventListener('touchend',   () => onDragEnd());
+
+  // ── Boot ──────────────────────────────────────────────────
+  canvas.classList.add('is-loading');
+
+  video.addEventListener('loadedmetadata', syncCanvasSize);
+  video.addEventListener('canplay', () => {
+    syncCanvasSize();
+    video.play().catch(() => {});
+    render();
+  });
+
+  // Start loading
+  video.load();
+
+})();
+</script>
+
+{% schema %}
+{
+  "name": "360° Product Spin",
+  "tag": "section",
+  "class": "product-spin-wrapper section-wrapper",
+  "disabled_on": { "groups": ["header"] },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label (above heading)",
+      "default": "Collection 01 / 01"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "HEROINES DROP"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Born on the road, made for the city."
+    },
+    {
+      "type": "header",
+      "content": "Video"
+    },
+    {
+      "type": "video",
+      "id": "product_video",
+      "label": "360° Green Screen Video",
+      "info": "Upload an MP4 or WebM of your product rotating against a green screen."
+    },
+    {
+      "type": "url",
+      "id": "product_video_url",
+      "label": "Or paste video URL",
+      "info": "Use if your video is hosted externally (CDN, Vimeo direct link, etc.)"
+    },
+    {
+      "type": "header",
+      "content": "Chroma Key (Green Screen Removal)"
+    },
+    {
+      "type": "range",
+      "id": "chroma_r",
+      "label": "Green screen — Red channel",
+      "min": 0,
+      "max": 250,
+      "step": 5,
+      "default": 30,
+      "info": "Red value of your green screen background"
+    },
+    {
+      "type": "range",
+      "id": "chroma_g",
+      "label": "Green screen — Green channel",
+      "min": 0,
+      "max": 250,
+      "step": 5,
+      "default": 200,
+      "info": "Green value of your green screen background"
+    },
+    {
+      "type": "range",
+      "id": "chroma_b",
+      "label": "Green screen — Blue channel",
+      "min": 0,
+      "max": 250,
+      "step": 5,
+      "default": 60,
+      "info": "Blue value of your green screen background"
+    },
+    {
+      "type": "range",
+      "id": "chroma_tolerance",
+      "label": "Tolerance (how much green to remove)",
+      "min": 10,
+      "max": 150,
+      "step": 5,
+      "default": 80,
+      "info": "Increase if green edges remain. Decrease if subject is being cut out."
+    },
+    {
+      "type": "range",
+      "id": "chroma_softness",
+      "label": "Edge softness",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "default": 25,
+      "info": "Feathers the edge between subject and removed background."
+    },
+    {
+      "type": "header",
+      "content": "Options"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_drag_hint",
+      "label": "Show 'drag to rotate' hint",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Call to action"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "CTA label",
+      "default": "14 Products — Discover"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "CTA link"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 150,
+      "step": 10,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 150,
+      "step": 10,
+      "unit": "px",
+      "default": 80
+    }
+  ],
+  "presets": [
+    {
+      "name": "360° Product Spin",
+      "settings": {
+        "label": "Collection 01 / 01",
+        "heading": "HEROINES DROP",
+        "subheading": "Born on the road, made for the city.",
+        "chroma_r": 30,
+        "chroma_g": 200,
+        "chroma_b": 60,
+        "chroma_tolerance": 80,
+        "chroma_softness": 25,
+        "show_drag_hint": true,
+        "cta_label": "14 Products — Discover",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    }
+  ]
+}
+{% endschema %}
