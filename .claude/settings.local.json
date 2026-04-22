@@ -4,7 +4,12 @@
       "Bash(claude mcp *)",
       "Bash(SHOPIFY_ACCESS_TOKEN=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 MYSHOPIFY_DOMAIN=fs6bbf-d1.myshopify.com npx -y shopify-mcp)",
       "Bash(kill %1)",
-      "Bash(wait)"
+      "Bash(wait)",
+      "WebFetch(domain:www.becaneparis.com)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "WebFetch(domain:fs6bbf-d1.myshopify.com)",
+      "Bash(shopify theme *)"
     ]
   }
 }
