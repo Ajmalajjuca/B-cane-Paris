@@ -9,16 +9,10 @@
   data-testid="product-list"
   class="
     section
-    section--{{ section.settings.section_width }}
-    color-{{ section.settings.color_scheme }}
-    section-resource-list
-    spacing-style
-    gap-style
+    section--full-width
+    no-gutters
   "
-  style="
-    {% render 'spacing-style', settings: section.settings %}
-    {% render 'gap-style', value: section.settings.gap %}
-  "
+  style="margin: 0 !important; padding: 0 !important; gap: 0 !important;"
 >
   <div class="section-resource-list__header">
     {%- content_for 'block', type: '_product-list-content', id: 'static-header' -%}

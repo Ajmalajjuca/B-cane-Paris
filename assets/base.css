@@ -16,26 +16,19 @@ body {
   /* Bécane Paris Palette */
   --color-background: #f5f2ee;
   --color-foreground: #1a1a18;
-  --color-accent: #c8a882;
-  --color-border: rgba(26, 26, 24, 0.1);
-  --color-shadow: rgba(0, 0, 0, 0.05);
+  --color-border: #1a1a18;
+  --color-grid-line: #1a1a18;
 
-  /* Bécane Paris Typography */
-  --font-heading-family: 'Playfair Display', serif;
-  --font-body-family: 'DM Sans', sans-serif;
+  /* Bécane Paris Typography (Brutalist) */
+  --font-heading-family: 'Archivo Black', sans-serif;
+  --font-body-family: 'Inter', sans-serif;
 
   /* Overriding original variables */
   --color-foreground-rgb: 26 26 24;
   --color-background-rgb: 245 242 238;
 
-  --hover-lift-amount: 0px;
-  --hover-scale-amount: 1.05;
-  --hover-subtle-zoom-amount: 1.05;
-  --hover-shadow-color: transparent;
-  --hover-transition-duration: 0.4s;
-  --hover-transition-timing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  --color-border: #1a1a18;
-  --color-grid-line: #1a1a18;
+  --hover-transition-duration: 0.3s;
+  --hover-transition-timing: cubic-bezier(0.1, 0.9, 0.2, 1);
 
   /* Force Zero Border Radius (Industrial) */
   --style-border-radius: 0px;
@@ -45,7 +38,18 @@ body {
 
   --font-heading--weight: 900;
   --font-body--weight: 400;
-  --font-nav--weight: 700;
+  --font-nav--weight: 900;
+}
+
+/* Brutalist Grid Utility */
+.grid-box {
+  border: 1px solid var(--color-grid-line);
+  background-color: var(--color-background);
+}
+
+.no-gutters {
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 /* Global Reset for Grid Aesthetic */
@@ -64,9 +68,13 @@ body, input, textarea, select, .paragraph {
 h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   font-family: var(--font-heading-family) !important;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.15em !important;
   font-weight: 900 !important;
   color: var(--color-foreground) !important;
+  display: inline-block !important;
+  transform: scaleX(1.2) !important;
+  transform-origin: left !important;
+  line-height: 0.8 !important;
 }
 
 /* Minimal Link Hover Animation */
@@ -4298,79 +4306,112 @@ product-recommendations:has([data-has-recommendations='false']) {
   }
 }
 
-/* Bécane Paris Industrial Grid Styles */
+/* Bécane Paris Technical Precision Grid */
 .product-card {
   background-color: var(--color-background) !important;
   border-right: 1px solid var(--color-grid-line) !important;
   border-bottom: 1px solid var(--color-grid-line) !important;
   transition: opacity 0.3s ease;
-  height: 100%;
+  height: 100% !important;
+  width: 100% !important;
+  margin: 0 !important;
+  position: relative !important;
+  counter-increment: product-index;
+}
+
+/* Product Index (01, 02...) */
+.product-card::before {
+  content: counter(product-index, decimal-leading-zero);
+  position: absolute;
+  bottom: 15px;
+  left: 15px;
+  font-family: var(--font-body-family);
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-foreground);
+  z-index: 10;
+}
+
+.resource-list, .grid, .product-grid-container {
+  gap: 0 !important;
+  --gap: 0 !important;
+  display: grid !important;
+  grid-template-columns: repeat(6, 1fr) !important; /* Force 6 Columns */
+  counter-reset: product-index;
+  border-top: 1px solid var(--color-grid-line);
+  border-left: 1px solid var(--color-grid-line);
 }
 
 .product-card__gallery {
   position: relative;
   overflow: hidden;
-  aspect-ratio: 1/1 !important; /* Force square */
+  aspect-ratio: 1/1 !important;
   border-bottom: 1px solid var(--color-grid-line);
 }
 
 .product-card__gallery img {
-  object-fit: cover;
-  width: 100%;
-  height: 100%;
-  transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+  object-fit: contain !important; /* Catalog style often uses contain for clean edges */
+  width: 100% !important;
+  height: 100% !important;
+  padding: 10%; /* Breathing room within cell */
+  transition: transform 0.8s cubic-bezier(0.1, 0.9, 0.2, 1);
 }
 
 .product-card:hover .product-card__gallery img {
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 
 .product-card__info {
-  padding: 1rem !important;
+  padding: 1.5rem !important;
+  background: transparent !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-end !important;
+  align-items: flex-end !important; /* Meta to the right */
+  position: absolute !important;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  pointer-events: none;
 }
 
 .product-card__title {
   font-family: var(--font-body-family) !important;
-  font-size: 0.8125rem !important;
+  font-size: 10px !important;
   text-transform: uppercase !important;
-  letter-spacing: 0.1em !important;
-  font-weight: 700 !important;
-  margin: 0 0 0.5rem 0 !important;
+  letter-spacing: 0.15em !important;
+  font-weight: 900 !important;
+  margin: 0 !important;
   color: var(--color-foreground) !important;
+  text-align: right;
 }
 
 .price {
   font-family: var(--font-body-family) !important;
-  font-size: 0.75rem !important;
-  font-weight: 900 !important;
+  font-size: 10px !important;
+  font-weight: 400 !important;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-}
-
-/* Global Animation Utility */
-.reveal {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
-.reveal.is-visible {
-  opacity: 1;
-  transform: translateY(0);
+  text-align: right;
 }
 
 /* Horizontal Scroll for Featured Collection on Mobile */
 @media screen and (max-width: 749px) {
+  .resource-list, .grid {
+    grid-template-columns: repeat(2, 1fr) !important; /* 2 col on mobile */
+  }
+  
   .resource-list--mobile-carousel {
     display: flex !important;
     overflow-x: auto !important;
     scroll-snap-type: x mandatory !important;
-    gap: 0 !important; /* Grid style has no gap */
-    padding-bottom: 0 !important;
+    gap: 0 !important;
   }
 
   .resource-list--mobile-carousel .resource-list__item {
-    flex: 0 0 80% !important;
+    flex: 0 0 70% !important;
     scroll-snap-align: start !important;
     border-right: 1px solid var(--color-grid-line);
   }

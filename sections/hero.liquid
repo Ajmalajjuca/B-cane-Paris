@@ -541,54 +541,76 @@
 
 {% stylesheet %}
   .hero {
-    --hero-min-height: 85vh;
-    border: 1px solid var(--color-grid-line);
-    border-top: none;
-    background-color: var(--color-background);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
+    /* Bécane Paris BRUTALIST HERO */
+    --hero-min-height: 90vh;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background-color: var(--color-background) !important;
+    border: 1px solid var(--color-grid-line) !important;
+    border-top: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    position: relative !important;
   }
 
   .hero__content {
-    width: 100%;
-    max-width: 1400px;
-    padding: 10vh 2rem;
-    text-align: center;
-    z-index: 2;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    height: 100% !important;
+    text-align: center !important;
+    padding: 0 !important;
+    margin: 0 !important;
   }
 
   .hero h1, .hero .h1 {
     font-family: var(--font-heading-family) !important;
-    font-size: clamp(3rem, 18vw, 12rem) !important;
-    line-height: 0.8 !important;
-    font-weight: 900 !important;
-    text-transform: uppercase;
+    font-size: clamp(5rem, 25vw, 15rem) !important;
+    line-height: 0.78 !important;
+    text-transform: uppercase !important;
+    letter-spacing: -0.04em !important;
+    font-weight: 950 !important;
     margin: 0 !important;
-    letter-spacing: -0.01em;
+    padding: 0 !important;
+    color: var(--color-foreground) !important;
+    z-index: 5 !important;
   }
 
   .hero p, .hero .paragraph {
     font-family: var(--font-body-family) !important;
-    font-size: 0.875rem !important;
-    text-transform: uppercase;
-    letter-spacing: 0.3em;
-    font-weight: 700;
-    margin-top: 3rem !important;
-    opacity: 0.8;
+    font-size: 13px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.3em !important;
+    font-weight: 900 !important;
+    margin: 40px 0 0 0 !important;
+    opacity: 0.9 !important;
   }
 
-  /* Snappy Snappy */
+  /* Cutout Image Style */
+  .hero__media {
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: auto !important;
+    height: 90% !important;
+    object-fit: contain !important;
+    z-index: 2 !important;
+    mix-blend-mode: multiply; /* Helps with background removal if not PNG */
+  }
+
+  /* Snappy Snappy Reveal */
   .hero-reveal {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+     animation: brutalReveal 0.6s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
   }
 
-  .hero-reveal.is-visible {
-    opacity: 1;
-    transform: translateY(0);
+  @keyframes brutalReveal {
+    from { opacity: 0; transform: translateY(50px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
   }
 {% endstylesheet %}
 

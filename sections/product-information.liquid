@@ -177,22 +177,27 @@
 %}
 
 {% stylesheet %}
-  /* Bécane Paris Product Information */
+  /* Bécane Paris BRUTALIST Product Info */
   .product-information {
     background-color: var(--color-background);
   }
 
   .product-information h1, .product-information .h1 {
     font-family: var(--font-heading-family) !important;
-    font-size: 3rem !important;
-    font-weight: 400 !important;
+    font-size: clamp(2rem, 5vw, 4rem) !important;
+    font-weight: 950 !important;
+    text-transform: uppercase !important;
+    line-height: 0.9 !important;
     margin-bottom: 2rem !important;
+    letter-spacing: -0.02em;
   }
 
   .product-information .price {
     font-family: var(--font-body-family) !important;
-    font-size: 1.25rem !important;
-    letter-spacing: 0.05em;
+    font-size: 1.5rem !important;
+    font-weight: 900 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
   }
 
   /* Zero-radius Add to Cart Button */
@@ -200,45 +205,38 @@
     border-radius: 0 !important;
     background: var(--color-foreground) !important;
     color: var(--color-background) !important;
-    text-transform: uppercase;
-    letter-spacing: 0.2em;
-    font-size: 0.875rem;
-    padding: 1.25rem;
-    width: 100%;
-    border: none;
+    text-transform: uppercase !important;
+    letter-spacing: 0.25em !important;
+    font-weight: 900 !important;
+    font-size: 13px !important;
+    padding: 1.5rem !important;
+    width: 100% !important;
+    border: none !important;
     transition: opacity 0.3s ease;
   }
 
-  .add-to-cart-button:hover {
-    opacity: 0.9;
-  }
-
-  /* Variant Pills Redesign */
+  /* Variant Pills Refactor (Square Boxes) */
   .variant-option__button-label {
     border-radius: 0 !important;
-    border: 1px solid var(--color-border) !important;
-    padding: 0.75rem 1.75rem !important;
+    border: 1px solid var(--color-grid-line) !important;
+    padding: 1rem 2rem !important;
     font-family: var(--font-body-family) !important;
-    text-transform: uppercase;
-    font-size: 0.75rem;
-    letter-spacing: 0.1em;
+    text-transform: uppercase !important;
+    font-size: 11px !important;
+    font-weight: 900 !important;
+    letter-spacing: 0.15em !important;
     cursor: pointer;
     background: transparent;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    margin: 0.25rem;
+    margin: 0 -1px -1px 0 !important; /* Stack like a grid */
   }
 
-  /* When input is checked, style the label */
   .variant-option__button-label:has(input:checked) {
     background: var(--color-foreground) !important;
     color: var(--color-background) !important;
-  }
-
-  .variant-option__button-label input {
-    display: none; /* Hide original radio */
   }
 
   .sticky-add-to-cart__bar {
@@ -247,14 +245,13 @@
     left: 0;
     right: 0;
     transform: translateY(100%);
-    z-index: var(--layer-header);
+    z-index: 100;
     background-color: var(--color-background) !important;
-    border-top: 1px solid var(--color-border);
-    padding: 1rem 2rem;
+    border-top: 1px solid var(--color-grid-line) !important;
+    padding: 1.5rem 2rem !important;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
   }
 
   .sticky-add-to-cart__bar[data-stuck='true'] {
@@ -263,9 +260,10 @@
 
   .sticky-add-to-cart__title {
     font-family: var(--font-heading-family) !important;
-    font-size: 1rem !important;
+    font-size: 13px !important;
+    text-transform: uppercase;
+    font-weight: 900;
   }
-
 {% endstylesheet %}
 
 {% schema %}

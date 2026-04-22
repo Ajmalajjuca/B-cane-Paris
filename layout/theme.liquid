@@ -40,6 +40,7 @@
     {% endif %}
 
     {{ content_for_header }}
+    {{ 'becane-technical.css' | asset_url | stylesheet_tag }}
     {% # theme-check-enable RemoteAsset %}
   </head>
 
