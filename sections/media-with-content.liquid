@@ -150,45 +150,55 @@
 
     grid-template-columns: var(--media-with-content-grid-columns);
     grid-template-areas: 'media media media' 'content content content';
+    background-color: var(--color-background) !important;
 
     @media screen and (min-width: 750px) {
-      --media-with-content-grid-columns: 3.5fr 2.5fr;
-
-      /* Default desktop layout is wide media, on the left, in full page section */
+      --media-with-content-grid-columns: 1fr 1fr; /* 50/50 split */
       grid-template-areas: 'media content';
     }
 
     .media-block {
       grid-area: media;
+      overflow: hidden;
+    }
+
+    .media-block img {
+       transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .media-block:hover img {
+       transform: scale(1.05); /* Subtle hover zoom */
     }
 
     .media-with-content__content {
       grid-area: content;
+      display: flex;
+      align-items: center;
+      padding: 4rem !important;
     }
 
-    /* Inner blocks spacing */
-    .media-with-content__content > .group-block-content {
-      padding-inline: var(--page-margin);
-      padding-block: calc(2 * var(--page-margin));
-
-      @media screen and (min-width: 750px) {
-        padding-block: var(--page-margin);
-      }
+    h1, h2, h3, .h1, .h2, .h3 {
+       font-family: var(--font-heading-family) !important;
+       font-size: 2.5rem !important;
+       margin-bottom: 2rem !important;
     }
 
-    &.section--page-width .media-with-content__content > .group-block-content {
-      padding-inline: 0;
-
-      @media screen and (min-width: 750px) {
-        padding-inline-start: var(--page-margin);
-      }
+    .button.link, a.link {
+       font-family: var(--font-body-family) !important;
+       text-transform: uppercase;
+       letter-spacing: 0.1em;
+       font-size: 0.75rem;
+       text-decoration: none;
+       border-bottom: 1px solid currentColor;
+       padding-bottom: 2px;
+       display: inline-flex;
+       align-items: center;
+       gap: 0.5rem;
     }
 
-    &.section--page-width.media-with-content--media-right .media-with-content__content > .group-block-content {
-      padding-inline-end: var(--page-margin);
-      padding-inline-start: 0;
-    }
+    .button.link::after { content: ' →'; }
   }
+
 
   .media-with-content[data-shopify-visual-preview] {
     --hero-min-height: 500px;

@@ -13,17 +13,76 @@ body {
 }
 
 :root {
-  --hover-lift-amount: 4px;
-  --hover-scale-amount: 1.03;
-  --hover-subtle-zoom-amount: 1.015;
-  --hover-shadow-color: var(--color-shadow);
-  --hover-transition-duration: 0.25s;
-  --hover-transition-timing: ease-out;
-  --surface-transition-duration: 0.3s;
-  --surface-transition-timing: var(--ease-out-quad);
-  --submenu-animation-speed: 360ms;
-  --submenu-animation-easing: cubic-bezier(0.25, 0.1, 0.25, 1);
+  /* Bécane Paris Palette */
+  --color-background: #f5f2ee;
+  --color-foreground: #1a1a18;
+  --color-accent: #c8a882;
+  --color-border: rgba(26, 26, 24, 0.1);
+  --color-shadow: rgba(0, 0, 0, 0.05);
+
+  /* Bécane Paris Typography */
+  --font-heading-family: 'Playfair Display', serif;
+  --font-body-family: 'DM Sans', sans-serif;
+
+  /* Overriding original variables */
+  --color-foreground-rgb: 26 26 24;
+  --color-background-rgb: 245 242 238;
+
+  --hover-lift-amount: 0px;
+  --hover-scale-amount: 1.05;
+  --hover-subtle-zoom-amount: 1.05;
+  --hover-shadow-color: transparent;
+  --hover-transition-duration: 0.4s;
+  --hover-transition-timing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
+
+/* Global Typography Overrides */
+body, input, textarea, select, .paragraph {
+  font-family: var(--font-body-family) !important;
+  color: var(--color-foreground) !important;
+  background-color: var(--color-background);
+}
+
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: var(--font-heading-family) !important;
+  font-weight: 400 !important;
+  color: var(--color-foreground) !important;
+}
+
+/* Minimal Link Hover Animation */
+a:not(.button) {
+  position: relative;
+  text-decoration: none;
+  transition: opacity 0.3s ease;
+}
+
+a:not(.button)::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background-color: currentColor;
+  transition: width 0.3s ease;
+}
+
+a:not(.button):hover::after {
+  width: 100%;
+}
+
+/* Scroll Fade-in Animation */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 
 html {
   /* Firefox */
@@ -4213,3 +4272,69 @@ product-recommendations:has([data-has-recommendations='false']) {
     translate: 0px var(--atc-destination, 0px);
   }
 }
+
+/* Bécane Paris Custom Styles */
+.product-card {
+  background-color: var(--color-background) !important;
+  border: none !important;
+  transition: transform 0.4s ease;
+}
+
+.product-card__gallery {
+  position: relative;
+  overflow: hidden;
+}
+
+.product-card__gallery img {
+  transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.product-card:hover .product-card__gallery img {
+  transform: scale(1.05);
+}
+
+.product-card__title {
+  font-family: var(--font-body-family) !important;
+  font-size: 0.875rem !important;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 1rem !important;
+  margin-bottom: 0.25rem !important;
+  color: var(--color-foreground) !important;
+}
+
+.price {
+  font-family: var(--font-body-family) !important;
+  font-size: 0.8125rem !important;
+  opacity: 0.8;
+}
+
+/* Global Animation Utility */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 1s ease, transform 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Horizontal Scroll for Featured Collection on Mobile */
+@media screen and (max-width: 749px) {
+  .resource-list--mobile-carousel {
+    display: flex !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    gap: 1rem !important;
+    padding-bottom: 1rem !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .resource-list--mobile-carousel .resource-list__item {
+    flex: 0 0 75% !important;
+    scroll-snap-align: start !important;
+  }
+}
+

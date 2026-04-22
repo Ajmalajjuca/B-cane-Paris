@@ -552,52 +552,57 @@
   .hero {
     position: relative;
     min-height: calc(var(--hero-min-height) - var(--hero-height-offset));
+    overflow: hidden;
+
+    /* Editorial Overrides */
+    h1, h2, .h1, .h2 {
+       font-family: var(--font-heading-family) !important;
+       font-size: clamp(3rem, 8vw, 6rem) !important;
+       line-height: 1.1 !important;
+       letter-spacing: -0.02em !important;
+       margin-bottom: 1.5rem !important;
+       opacity: 0;
+       transform: translateY(30px);
+       animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards 0.2s;
+    }
+
+    .hero__content-wrapper p, .hero__content-wrapper .rte {
+       font-family: var(--font-body-family) !important;
+       font-size: 0.875rem !important;
+       text-transform: uppercase;
+       letter-spacing: 0.05em;
+       opacity: 0;
+       transform: translateY(20px);
+       animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards 0.4s;
+    }
+
+    button, .button {
+       opacity: 0;
+       animation: fadeIn 1s ease forwards 0.6s;
+    }
   }
 
-  .hero[data-shopify-visual-preview] {
-    --hero-min-height: 600px;
+  @keyframes fadeUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 
-    min-height: 600px;
+  @keyframes fadeIn {
+    to {
+      opacity: 1;
+    }
   }
 
   .hero__container {
     position: relative;
     overflow: hidden;
-    border: var(--hero-border-width) var(--hero-border-style) rgb(var(--color-border-rgb) / var(--hero-border-opacity));
+    border: none !important; /* Minimal: no border */
     min-height: inherit;
-    align-items: var(--vertical-alignment-mobile);
-    justify-content: var(--horizontal-alignment);
+    align-items: center; /* Center vertically for editorial style */
+    justify-content: flex-start; /* Often left-aligned editorial */
     z-index: var(--layer-base);
-
-    @media screen and (min-width: 750px) {
-      align-items: var(--vertical-alignment);
-    }
-  }
-
-  .hero__content-wrapper.page-width {
-    grid-column: 2 / 3;
-  }
-
-  .hero__content-wrapper {
-    position: relative;
-    inset: 0;
-    z-index: var(--layer-flat);
-  }
-
-  .hero__content-wrapper .group-block-content {
-    position: relative;
-  }
-
-  .hero__media-grid {
-    position: absolute;
-    inset: 0;
-    display: grid;
-    grid-column: 1 / -1;
-    grid-template-columns: repeat(var(--hero-media-count, 1), 1fr);
-  }
-
-  .hero--auto .hero__media {
-    aspect-ratio: var(--hero-media-aspect-ratio);
   }
 
   .hero--no-blocks-auto-height {

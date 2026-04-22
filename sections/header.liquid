@@ -415,23 +415,45 @@
   }
 
   .header {
-    /* Set header paddings based on height setting */
-    --header-padding: var(--padding-sm);
+    /* Bécane Paris Header Styles */
+    --header-padding: 1.5rem;
     --font-paragraph--line-height: 1;
-    --header-content-transition-timing: 0s;
+    --header-content-transition-timing: 0.3s ease;
 
     display: block;
     contain: layout style;
-    background: transparent;
+    background: transparent !important;
+    border: none !important;
 
-    a,
-    .button,
-    .button-secondary,
+    a:not(.button),
     .header-actions__action {
-      /* reset style from base.css */
-      transition: color var(--header-content-transition-timing), border-color var(--header-content-transition-timing);
+      font-family: var(--font-body-family) !important;
+      font-size: 0.75rem !important;
+      letter-spacing: 0.1em !important;
+      text-transform: uppercase !important;
+      transition: color 0.3s ease, border-color 0.3s ease;
+      color: var(--color-foreground) !important;
+    }
+
+    /* Remove default shadow/background */
+    .header__underlay-closed, .header__underlay-open {
+       background: transparent !important;
+       box-shadow: none !important;
+    }
+
+    svg {
+      width: 1.25rem;
+      height: 1.25rem;
     }
   }
+
+  /* Scrolled state (for JS logic we will add later) */
+  .header--scrolled {
+    background-color: var(--color-background) !important;
+    border-bottom: 1px solid var(--color-border) !important;
+    transition: background-color 0.4s ease;
+  }
+
 
   #header-component :is(.header-menu, .dropdown-localization) {
     display: none;
