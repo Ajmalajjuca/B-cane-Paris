@@ -47,7 +47,62 @@
 </div>
 
 {% stylesheet %}
-  /* Footer styles handled in becane-technical.css */
+  /* Footer — Bécane Paris style: 1 row, minimal links */
+  .footer-content {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    background: #ffffff !important;
+    border-top: 1px solid #e8e8e8 !important;
+    padding: 1.5rem 3rem !important;
+    gap: 1rem !important;
+    grid-template-columns: unset !important;
+  }
+
+  .footer-content > * {
+    border: none !important;
+    padding: 0 !important;
+    min-height: 0 !important;
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    gap: 0 !important;
+  }
+
+  /* Hide section headings */
+  .footer-content h2,
+  .footer-content h3,
+  .footer-content .h3,
+  .footer-content .menu__heading__default {
+    display: none !important;
+  }
+
+  .footer-content a {
+    font-family: 'Space Grotesk', system-ui, sans-serif !important;
+    font-size: 0.68rem !important;
+    font-weight: 400 !important;
+    letter-spacing: 0.1em !important;
+    text-transform: uppercase !important;
+    color: #0a0a0a !important;
+    text-decoration: none !important;
+    margin-right: 1.5rem !important;
+    margin-bottom: 0 !important;
+    display: inline !important;
+    transition: opacity 0.2s ease !important;
+  }
+
+  .footer-content a:hover { opacity: 0.5 !important; }
+
+  @media screen and (max-width: 749px) {
+    .footer-content {
+      flex-direction: column !important;
+      align-items: flex-start !important;
+      padding: 2rem 1.5rem !important;
+    }
+  }
 {% endstylesheet %}
 
 {% schema %}

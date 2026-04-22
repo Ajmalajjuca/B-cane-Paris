@@ -408,34 +408,47 @@
 ></script>
 
 {% stylesheet %}
-  /* Header — editorial minimal */
+  /* Header — Bécane Paris style: white, minimal, uppercase sans */
   .header {
-    background: var(--color-background) !important;
+    background: #ffffff !important;
     border: none !important;
-    border-bottom: 1px solid var(--color-border) !important;
-    transition: background 0.4s ease, border-color 0.4s ease !important;
+    border-bottom: 1px solid #e8e8e8 !important;
+    box-shadow: none !important;
+    transition: background 0.3s ease !important;
 
-    .header__logo {
-      font-family: var(--font-heading-family) !important;
-      font-size: 1.15rem !important;
-      font-style: italic !important;
-      font-weight: 400 !important;
-      text-transform: none !important;
+    .header__logo,
+    .header__logo a,
+    .header__logo .h2 {
+      font-family: 'Space Grotesk', system-ui, sans-serif !important;
+      font-size: 0.85rem !important;
+      font-weight: 700 !important;
+      letter-spacing: 0.12em !important;
+      text-transform: uppercase !important;
       transform: none !important;
-      letter-spacing: 0.06em !important;
+      font-style: normal !important;
       border: none !important;
       padding: 0 !important;
+      color: #0a0a0a !important;
     }
 
     a:not(.button),
     .header-actions__action {
-      font-family: var(--font-body-family) !important;
-      font-size: 0.68rem !important;
+      font-family: 'Space Grotesk', system-ui, sans-serif !important;
+      font-size: 0.72rem !important;
       font-weight: 400 !important;
       text-transform: uppercase !important;
-      letter-spacing: 0.14em !important;
-      color: var(--color-foreground) !important;
+      letter-spacing: 0.1em !important;
+      color: #0a0a0a !important;
+      text-decoration: none !important;
+      transition: opacity 0.2s ease !important;
     }
+
+    a:not(.button):hover {
+      opacity: 0.5 !important;
+    }
+
+    /* Remove any underline animations from header */
+    a:not(.button)::after { display: none !important; }
 
     .header-actions {
       gap: 1.5rem !important;
@@ -444,7 +457,6 @@
     .header__column {
       border: none !important;
       height: auto !important;
-      padding: 1.25rem 2rem !important;
     }
   }
 
@@ -454,16 +466,26 @@
     border-bottom-color: transparent !important;
   }
 
-  /* Scrolled state */
+  .header[transparent] a,
+  .header[transparent] .header-actions__action {
+    color: #fff !important;
+  }
+
+  /* Scrolled: white background appears */
   .header.is-scrolled {
-    background: var(--color-background) !important;
-    border-bottom-color: var(--color-border) !important;
-    box-shadow: none !important;
+    background: #ffffff !important;
+    border-bottom-color: #e8e8e8 !important;
+  }
+
+  .header.is-scrolled a,
+  .header.is-scrolled .header-actions__action {
+    color: #0a0a0a !important;
   }
 
   @media screen and (max-width: 749px) {
-    .header .header__logo {
-      font-size: 1rem !important;
+    .header .header__logo,
+    .header .header__logo .h2 {
+      font-size: 0.8rem !important;
     }
   }
 {% endstylesheet %}

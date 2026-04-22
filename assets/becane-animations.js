@@ -1,83 +1,110 @@
 /**
- * Bécane Paris — Editorial Animations
- * Fade-in on scroll · transparent header · smooth page entry
+ * Bécane Paris — Site-matched JS
+ * · Product numbering (01, 02…) injected above each product card image
+ * · Header scroll state (transparent → opaque at 80px)
+ * · IntersectionObserver fade-in on scroll
+ * · Smooth page opacity entry
  */
 
 document.addEventListener('DOMContentLoaded', () => {
 
-  // ── 1. Scroll fade-in via IntersectionObserver ──────────────
-  const revealTargets = document.querySelectorAll(
-    '.product-card, .media-with-content, .hero__content, ' +
-    '.section, .footer-content, .reveal, [data-reveal]'
-  );
+  // ── 1. Product numbering — inject "01" above each card image ──
+  function addProductNumbers() {
+    const grids = document.querySelectorAll(
+      '.product-grid, .resource-list, .collection-wrapper .grid'
+    );
 
-  const revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('is-visible');
-        revealObserver.unobserve(entry.target);
-      }
+    grids.forEach(grid => {
+      const items = grid.querySelectorAll(
+        '.product-grid__item, .resource-list__item'
+      );
+
+      items.forEach((item, i) => {
+        const gallery = item.querySelector(
+          '.product-card__gallery, .card-gallery, .product-card__image'
+        );
+        if (!gallery) return;
+
+        // Only add if not already added
+        if (item.querySelector('.bp-number')) return;
+
+        const num = document.createElement('span');
+        num.className = 'bp-number';
+        num.textContent = String(i + 1).padStart(2, '0');
+
+        // Insert before the gallery (above the image)
+        gallery.parentNode.insertBefore(num, gallery);
+      });
     });
-  }, {
-    threshold: 0.08,
-    rootMargin: '0px 0px -40px 0px'
-  });
+  }
 
-  revealTargets.forEach(el => {
-    if (!el.classList.contains('is-visible')) {
-      el.classList.add('reveal');
-      revealObserver.observe(el);
-    }
-  });
+  addProductNumbers();
 
-  // ── 2. Header: show background after 80px scroll ────────────
+  // Re-run after any AJAX loads (infinite scroll, etc.)
+  const gridContainer = document.querySelector('.product-grid-container');
+  if (gridContainer) {
+    new MutationObserver(addProductNumbers).observe(gridContainer, {
+      childList: true,
+      subtree: true,
+    });
+  }
+
+  // ── 2. Header scroll state ──────────────────────────────────
   const header = document.querySelector('header-component, .header');
   if (header) {
-    const SCROLL_THRESHOLD = 80;
     let ticking = false;
+    const THRESHOLD = 80;
 
     const updateHeader = () => {
-      if (window.scrollY > SCROLL_THRESHOLD) {
-        header.classList.add('is-scrolled');
-      } else {
-        header.classList.remove('is-scrolled');
-      }
+      header.classList.toggle('is-scrolled', window.scrollY > THRESHOLD);
       ticking = false;
     };
 
     window.addEventListener('scroll', () => {
       if (!ticking) {
-        window.requestAnimationFrame(updateHeader);
+        requestAnimationFrame(updateHeader);
         ticking = true;
       }
     }, { passive: true });
   }
 
-  // ── 3. Smooth page entry ────────────────────────────────────
+  // ── 3. Scroll fade-in via IntersectionObserver ──────────────
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.06, rootMargin: '0px 0px -30px 0px' });
+
+  document.querySelectorAll(
+    '.product-grid__item, .resource-list__item, ' +
+    '.media-with-content, .reveal, [data-reveal], ' +
+    '.hero__content, .footer-content'
+  ).forEach(el => {
+    el.classList.add('reveal');
+    observer.observe(el);
+  });
+
+  // ── 4. Page entry fade ──────────────────────────────────────
   document.body.style.opacity = '0';
-  document.body.style.transition = 'opacity 0.5s ease';
-  window.requestAnimationFrame(() => {
+  document.body.style.transition = 'opacity 0.4s ease';
+  requestAnimationFrame(() => {
     document.body.style.opacity = '1';
   });
 
-  // ── 4. Hero headline fade-up on load ────────────────────────
-  const heroHeading = document.querySelector('.hero h1, .hero__heading, .hero .heading');
-  if (heroHeading) {
-    heroHeading.style.opacity = '0';
-    heroHeading.style.transform = 'translateY(32px)';
-    heroHeading.style.transition = 'opacity 1s ease 0.3s, transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s';
-    window.requestAnimationFrame(() => {
-      heroHeading.style.opacity = '1';
-      heroHeading.style.transform = 'translateY(0)';
+  // ── 5. Hero entry animation ─────────────────────────────────
+  const heroEl = document.querySelector('.hero h1, .hero__heading');
+  if (heroEl) {
+    Object.assign(heroEl.style, {
+      opacity: '0',
+      transform: 'translateY(28px)',
+      transition: 'opacity 0.9s ease 0.2s, transform 0.9s cubic-bezier(0.25,0.46,0.45,0.94) 0.2s',
     });
-  }
-
-  const heroSub = document.querySelector('.hero .subheading, .hero__subheading, .hero p');
-  if (heroSub) {
-    heroSub.style.opacity = '0';
-    heroSub.style.transition = 'opacity 0.9s ease 0.65s';
-    window.requestAnimationFrame(() => {
-      heroSub.style.opacity = '1';
+    requestAnimationFrame(() => {
+      heroEl.style.opacity = '1';
+      heroEl.style.transform = 'translateY(0)';
     });
   }
 

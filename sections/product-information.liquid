@@ -177,7 +177,109 @@
 %}
 
 {% stylesheet %}
-  /* Product page styles handled in becane-technical.css */
+  /* Product page — Bécane Paris style */
+  .product-information {
+    background: #ffffff !important;
+  }
+
+  /* Vendor label in mono muted */
+  .product__vendor,
+  .product-information__vendor {
+    font-family: 'Space Mono', monospace !important;
+    font-size: 0.6rem !important;
+    font-weight: 400 !important;
+    letter-spacing: 0.2em !important;
+    text-transform: uppercase !important;
+    color: #888 !important;
+    display: block !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  /* Product title — uppercase, bold, tight */
+  .product-information h1,
+  .product-information .h1,
+  .product__title {
+    font-family: 'Space Grotesk', system-ui, sans-serif !important;
+    font-size: clamp(1.5rem, 2.5vw, 2.2rem) !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: -0.01em !important;
+    line-height: 1.0 !important;
+    transform: none !important;
+    margin-bottom: 1rem !important;
+    color: #0a0a0a !important;
+  }
+
+  /* Price — mono */
+  .product-information .price,
+  .product__price {
+    font-family: 'Space Mono', monospace !important;
+    font-size: 0.85rem !important;
+    font-weight: 400 !important;
+    color: #0a0a0a !important;
+    letter-spacing: 0.05em !important;
+    text-transform: uppercase !important;
+  }
+
+  /* Variant pills */
+  .variant-option__button-label {
+    border: 1px solid #e8e8e8 !important;
+    border-radius: 0 !important;
+    padding: 0.5rem 1rem !important;
+    font-family: 'Space Grotesk', system-ui, sans-serif !important;
+    font-size: 0.68rem !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.1em !important;
+    text-transform: uppercase !important;
+    background: transparent !important;
+    cursor: pointer;
+    transition: all 0.15s ease !important;
+    color: #0a0a0a !important;
+    margin: 0 !important;
+  }
+
+  .variant-option__button-label:has(input:checked) {
+    background: #0a0a0a !important;
+    color: #ffffff !important;
+    border-color: #0a0a0a !important;
+  }
+
+  /* Add to cart */
+  .add-to-cart-button,
+  .button--primary,
+  .product-form__submit {
+    border-radius: 0 !important;
+    background: #0a0a0a !important;
+    color: #ffffff !important;
+    font-family: 'Space Grotesk', system-ui, sans-serif !important;
+    font-size: 0.7rem !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.18em !important;
+    text-transform: uppercase !important;
+    padding: 1.1rem 2rem !important;
+    width: 100% !important;
+    border: none !important;
+    transition: opacity 0.2s ease !important;
+    margin-top: 1.5rem !important;
+  }
+
+  .add-to-cart-button:hover,
+  .button--primary:hover { opacity: 0.7 !important; }
+
+  /* Sticky bar */
+  .sticky-add-to-cart__bar {
+    background: #ffffff !important;
+    border-top: 1px solid #e8e8e8 !important;
+    box-shadow: none !important;
+  }
+
+  .sticky-add-to-cart__title {
+    font-family: 'Space Grotesk', system-ui, sans-serif !important;
+    font-size: 0.75rem !important;
+    font-weight: 500 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.1em !important;
+  }
 {% endstylesheet %}
 
 {% schema %}
