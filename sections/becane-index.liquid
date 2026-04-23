@@ -1,0 +1,250 @@
+{% liquid
+  if section.settings.collection != blank
+    assign bp_collection = collections[section.settings.collection]
+  else
+    assign bp_collection = collections.all
+  endif
+  assign bp_count = bp_collection.products_count | default: 0
+  assign bp_label = section.settings.collection_number | default: 'Collection 01 / 01'
+  assign bp_title = section.settings.collection_title | default: 'Collection'
+%}
+
+<section class="bp-index" data-section-id="{{ section.id }}">
+
+  <div class="bp-index__upper">
+    <p class="bp-index__sublabel">{{ bp_label }}</p>
+    <h1 class="bp-index__title">{{ bp_title }}</h1>
+    <p class="bp-index__meta">
+      <span class="bp-index__meta-word">Products</span>
+      <span class="bp-index__meta-num">{{ bp_count }}</span>
+    </p>
+  </div>
+
+  <div class="bp-index__strip-outer">
+    <div class="bp-index__strip">
+      {% for product in bp_collection.products limit: 14 %}
+        <a href="{{ product.url }}" class="bp-index__card" aria-label="{{ product.title | escape }}">
+          {% if product.featured_image %}
+            {{
+              product.featured_image
+              | image_url: width: 600
+              | image_tag:
+                loading: 'lazy',
+                class: 'bp-index__img',
+                alt: product.title | escape
+            }}
+          {% else %}
+            <div class="bp-index__blank"></div>
+          {% endif %}
+        </a>
+      {% else %}
+        {% for i in (1..9) %}
+          <div class="bp-index__card bp-index__card--empty">
+            <div class="bp-index__blank"></div>
+          </div>
+        {% endfor %}
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="bp-index__bar">
+    <span class="bp-index__bar-count">{{ bp_count }} Products</span>
+    <a href="{{ bp_collection.url | default: '/collections/all' }}" class="bp-index__bar-cta">Discover</a>
+  </div>
+
+</section>
+
+{% stylesheet %}
+
+.bp-index {
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+  padding: 0;
+  overflow: hidden;
+  background: #eeede9;
+}
+
+/* ── Upper text block ─────────────────────────────────────── */
+.bp-index__upper {
+  flex: 0 0 auto;
+  padding: 2.5rem 3rem 0;
+}
+
+.bp-index__sublabel {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.6rem;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #888;
+  margin: 0 0 0.25rem;
+  line-height: 1;
+}
+
+.bp-index__title {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: clamp(4.5rem, 12vw, 13rem);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.04em;
+  line-height: 0.85;
+  color: #0a0a0a;
+  margin: 0 0 0.4rem;
+  transform: none !important;
+}
+
+.bp-index__meta {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.6rem;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #888;
+  margin: 0.4rem 0 0;
+  display: flex;
+  align-items: baseline;
+  gap: 1.8rem;
+  line-height: 1;
+}
+
+.bp-index__meta-num {
+  color: #0a0a0a;
+}
+
+/* ── Model strip ──────────────────────────────────────────── */
+.bp-index__strip-outer {
+  flex: 1 1 auto;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  padding: 0 2.5rem;
+  min-height: 0;
+}
+
+.bp-index__strip {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 0.35rem;
+  width: 100%;
+  height: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.bp-index__strip::-webkit-scrollbar { display: none; }
+
+.bp-index__card {
+  flex: 0 0 auto;
+  display: block;
+  height: 42svh;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+  overflow: hidden;
+}
+
+.bp-index__card:hover { opacity: 0.8; }
+
+.bp-index__img {
+  display: block;
+  height: 100%;
+  width: auto;
+  object-fit: cover;
+  max-width: none;
+}
+
+.bp-index__blank {
+  width: 88px;
+  height: 100%;
+  min-height: 200px;
+  background: #d8d6d2;
+}
+
+/* ── Bottom bar ───────────────────────────────────────────── */
+.bp-index__bar {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.9rem 3rem;
+  border-top: 1px solid #d8d6d2;
+  margin-top: 1rem;
+}
+
+.bp-index__bar-count {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.58rem;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #888;
+}
+
+.bp-index__bar-cta {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #0a0a0a;
+  text-decoration: none;
+  border-bottom: 1px solid #0a0a0a;
+  padding-bottom: 1px;
+  transition: opacity 0.2s ease;
+}
+
+.bp-index__bar-cta:hover { opacity: 0.5; }
+
+/* ── Mobile ───────────────────────────────────────────────── */
+@media screen and (max-width: 749px) {
+  .bp-index__upper {
+    padding: 2rem 1.5rem 0;
+  }
+
+  .bp-index__card {
+    height: 36svh;
+  }
+
+  .bp-index__strip-outer {
+    padding: 0 1rem;
+  }
+
+  .bp-index__bar {
+    padding: 0.9rem 1.5rem;
+  }
+}
+
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Bécane Index",
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "text",
+      "id": "collection_number",
+      "label": "Collection label",
+      "default": "Collection 01 / 01"
+    },
+    {
+      "type": "text",
+      "id": "collection_title",
+      "label": "Collection title",
+      "default": "Collection"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Bécane Index"
+    }
+  ]
+}
+{% endschema %}
