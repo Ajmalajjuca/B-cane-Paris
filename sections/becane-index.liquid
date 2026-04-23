@@ -9,116 +9,135 @@
   assign bp_title = section.settings.collection_title | default: 'Collection'
 %}
 
-<section class="bp-index" data-section-id="{{ section.id }}">
+<div class="bp-page">
 
-  <div class="bp-index__upper">
-    <p class="bp-index__sublabel">{{ bp_label }}</p>
-    <h1 class="bp-index__title">{{ bp_title }}</h1>
-    <p class="bp-index__meta">
-      <span class="bp-index__meta-word">Products</span>
-      <span class="bp-index__meta-num">{{ bp_count }}</span>
-    </p>
-  </div>
+  <!-- ── Section 1: Collection index ─────────────────────── -->
+  <section class="bp-index" data-section-id="{{ section.id }}">
 
-  <div class="bp-index__strip-outer">
-    <div class="bp-index__strip">
-      {% for product in bp_collection.products limit: 14 %}
-        <a href="{{ product.url }}" class="bp-index__card" aria-label="{{ product.title | escape }}">
-          {% if product.featured_image %}
-            {{
-              product.featured_image
-              | image_url: width: 600
-              | image_tag:
-                loading: 'lazy',
-                class: 'bp-index__img',
-                alt: product.title | escape
-            }}
-          {% else %}
-            <div class="bp-index__blank"></div>
-          {% endif %}
-        </a>
-      {% else %}
-        {% for i in (1..9) %}
-          <div class="bp-index__card bp-index__card--empty">
-            <div class="bp-index__blank"></div>
-          </div>
-        {% endfor %}
-      {% endfor %}
+    <div class="bp-index__upper">
+      <p class="bp-index__sublabel">{{ bp_label }}</p>
+      <h1 class="bp-index__title">{{ bp_title }}</h1>
+      <p class="bp-index__meta">
+        <span class="bp-index__meta-word">Products</span>
+        <span class="bp-index__meta-num">{{ bp_count }}</span>
+      </p>
     </div>
-  </div>
 
-  <div class="bp-index__bar">
-    <span class="bp-index__bar-count">{{ bp_count }} Products</span>
-    <a href="{{ bp_collection.url | default: '/collections/all' }}" class="bp-index__bar-cta">Discover</a>
-  </div>
+    <div class="bp-index__strip-outer">
+      <div class="bp-index__strip">
+        {% for product in bp_collection.products limit: 14 %}
+          <a href="{{ product.url }}" class="bp-index__card" aria-label="{{ product.title | escape }}">
+            {% if product.featured_image %}
+              {{
+                product.featured_image
+                | image_url: width: 600
+                | image_tag:
+                  loading: 'lazy',
+                  class: 'bp-index__img',
+                  alt: product.title | escape
+              }}
+            {% else %}
+              <div class="bp-index__blank"></div>
+            {% endif %}
+          </a>
+        {% else %}
+          {% for i in (1..9) %}
+            <div class="bp-index__card bp-index__card--empty">
+              <div class="bp-index__blank"></div>
+            </div>
+          {% endfor %}
+        {% endfor %}
+      </div>
+    </div>
 
-</section>
+    <div class="bp-index__bar">
+      <span class="bp-index__bar-count">{{ bp_count }} Products</span>
+      <a href="{{ bp_collection.url | default: '/collections/all' }}" class="bp-index__bar-cta">Discover</a>
+    </div>
+
+  </section>
+
+  <!-- ── Section 2: Brand manifesto ─────────────────────── -->
+  <section class="bp-manifesto">
+    <p class="bp-manifesto__text">{{ section.settings.manifesto_text }}</p>
+  </section>
+
+</div>
 
 {% stylesheet %}
+
+/* ── Page wrapper ─────────────────────────────────────────── */
+.bp-page {
+  background: #ebebeb;
+  min-height: 100vh;
+}
+
+/* ══ SECTION 1: COLLECTION INDEX ════════════════════════════ */
 
 .bp-index {
   display: flex;
   flex-direction: column;
-  min-height: 100svh;
+  height: 100svh;
   padding: 0;
   overflow: hidden;
-  background: #eeede9;
+  background: #ebebeb;
 }
 
-/* ── Upper text block ─────────────────────────────────────── */
+/* ── Upper text block ────────────────────────────────────── */
 .bp-index__upper {
   flex: 0 0 auto;
-  padding: 2.5rem 3rem 0;
+  padding: 2rem 2.5rem 0;
 }
 
 .bp-index__sublabel {
   font-family: 'Space Mono', monospace;
-  font-size: 0.6rem;
+  font-size: 0.58rem;
   font-weight: 400;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #888;
-  margin: 0 0 0.25rem;
+  margin: 0 0 0.2rem;
   line-height: 1;
 }
 
 .bp-index__title {
   font-family: 'Space Grotesk', system-ui, sans-serif;
-  font-size: clamp(4.5rem, 12vw, 13rem);
+  font-size: clamp(1.6rem, 2.5vw, 2.8rem);
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: -0.04em;
-  line-height: 0.85;
+  letter-spacing: -0.03em;
+  line-height: 1;
   color: #0a0a0a;
-  margin: 0 0 0.4rem;
+  margin: 0 0 0.5rem;
   transform: none !important;
 }
 
 .bp-index__meta {
   font-family: 'Space Mono', monospace;
-  font-size: 0.6rem;
+  font-size: 0.58rem;
   font-weight: 400;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #888;
-  margin: 0.4rem 0 0;
+  margin: 0.3rem 0 0;
   display: flex;
   align-items: baseline;
-  gap: 1.8rem;
   line-height: 1;
 }
 
 .bp-index__meta-num {
   color: #0a0a0a;
+  margin-left: 4.5rem;
 }
 
-/* ── Model strip ──────────────────────────────────────────── */
+/* ── Model strip ─────────────────────────────────────────── */
 .bp-index__strip-outer {
   flex: 1 1 auto;
   overflow: hidden;
   display: flex;
-  align-items: flex-end;
-  padding: 0 2.5rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0 2rem;
   min-height: 0;
 }
 
@@ -126,9 +145,10 @@
   display: flex;
   flex-direction: row;
   align-items: flex-end;
-  gap: 0.35rem;
+  justify-content: center;
+  gap: 1rem;
   width: 100%;
-  height: 100%;
+  height: 50%;
   overflow-x: auto;
   overflow-y: hidden;
   scrollbar-width: none;
@@ -138,9 +158,10 @@
 .bp-index__strip::-webkit-scrollbar { display: none; }
 
 .bp-index__card {
-  flex: 0 0 auto;
+  flex: 0 1 auto;
   display: block;
-  height: 42svh;
+  height: 100%;
+  max-height: 45svh;
   text-decoration: none;
   transition: opacity 0.2s ease;
   overflow: hidden;
@@ -157,64 +178,79 @@
 }
 
 .bp-index__blank {
-  width: 88px;
+  width: 80px;
   height: 100%;
-  min-height: 200px;
-  background: #d8d6d2;
+  min-height: 180px;
+  background: #d0d0ce;
 }
 
-/* ── Bottom bar ───────────────────────────────────────────── */
+/* ── Bottom bar ──────────────────────────────────────────── */
 .bp-index__bar {
   flex: 0 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.9rem 3rem;
-  border-top: 1px solid #d8d6d2;
-  margin-top: 1rem;
+  padding: 0.75rem 2.5rem;
+  border: 1px solid #d4d4d2;
+  margin: 1rem 2rem;
+  background: #ebebeb;
 }
 
 .bp-index__bar-count {
   font-family: 'Space Mono', monospace;
   font-size: 0.58rem;
   font-weight: 400;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: #888;
 }
 
 .bp-index__bar-cta {
-  font-family: 'Space Grotesk', system-ui, sans-serif;
-  font-size: 0.62rem;
-  font-weight: 500;
-  letter-spacing: 0.18em;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.58rem;
+  font-weight: 400;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #0a0a0a;
+  color: #888;
   text-decoration: none;
-  border-bottom: 1px solid #0a0a0a;
-  padding-bottom: 1px;
-  transition: opacity 0.2s ease;
+  transition: color 0.2s ease;
 }
 
-.bp-index__bar-cta:hover { opacity: 0.5; }
+.bp-index__bar-cta:hover { color: #0a0a0a; }
 
-/* ── Mobile ───────────────────────────────────────────────── */
+/* ══ SECTION 2: BRAND MANIFESTO ═════════════════════════════ */
+
+.bp-manifesto {
+  background: #f0f0ee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8rem 4rem;
+  min-height: 80vh;
+}
+
+.bp-manifesto__text {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: clamp(2rem, 6vw, 6.5rem);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 1.0;
+  color: #0a0a0a;
+  text-align: center;
+  max-width: 1100px;
+  margin: 0;
+  transform: none !important;
+}
+
+/* ── Mobile ──────────────────────────────────────────────── */
 @media screen and (max-width: 749px) {
-  .bp-index__upper {
-    padding: 2rem 1.5rem 0;
-  }
-
-  .bp-index__card {
-    height: 36svh;
-  }
-
-  .bp-index__strip-outer {
-    padding: 0 1rem;
-  }
-
-  .bp-index__bar {
-    padding: 0.9rem 1.5rem;
-  }
+  .bp-index__upper { padding: 1.5rem 1.5rem 0; }
+  .bp-index__strip-outer { padding: 0 1rem; }
+  .bp-index__bar { margin: 0.75rem 1rem; padding: 0.75rem 1rem; }
+  .bp-index__card { max-height: 38svh; }
+  .bp-manifesto { padding: 4rem 1.5rem; }
+  .bp-manifesto__text { font-size: clamp(1.8rem, 10vw, 3rem); }
 }
 
 {% endstylesheet %}
@@ -239,6 +275,12 @@
       "id": "collection_title",
       "label": "Collection title",
       "default": "Collection"
+    },
+    {
+      "type": "textarea",
+      "id": "manifesto_text",
+      "label": "Brand manifesto text",
+      "default": "Born on the road, made for the city. Technical, protective and unapologetically feminine, our pieces give women the confidence to move freely. A call to carve your own path, with no compromise and no concession."
     }
   ],
   "presets": [

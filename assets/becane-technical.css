@@ -14,10 +14,10 @@
 
 /* ─── TOKENS ──────────────────────────────────────────── */
 :root {
-  --bp-bg: #eeede9;
-  --bp-white: #eeede9;
+  --bp-bg: #ebebeb;
+  --bp-white: #ebebeb;
   --bp-black: #0a0a0a;
-  --bp-border: #d8d6d2;
+  --bp-border: #d4d4d2;
   --bp-muted: #888888;
   --bp-font: 'Space Grotesk', system-ui, sans-serif;
   --bp-mono: 'Space Mono', monospace;
@@ -38,6 +38,32 @@ html, body {
   color: var(--bp-black) !important;
 }
 
+/* ─── HIDE SEARCH & ACCOUNT ICONS ────────────────────── */
+/* Hide user/account button entirely */
+.account-button,
+shopify-account,
+.header-actions__action[href*="account"],
+.header-actions__action[href*="login"] {
+  display: none !important;
+}
+
+/* Hide search button/icon */
+.header__search-button,
+.header-search,
+.header__button--search,
+[data-testid="search-trigger"],
+.modal-opener[href*="search"],
+button.modal-opener:has(.icon-search),
+.header__icon--search,
+.header-actions__search {
+  display: none !important;
+}
+
+/* Cart icon — show SVG icon (keep it) but no bubble dot */
+.header-actions__cart-icon--has-cart svg {
+  mask: none !important;
+}
+
 /* ─── TYPOGRAPHY ──────────────────────────────────────── */
 h1, h2, h3, h4, h5, h6,
 .h1, .h2, .h3, .h4, .h5, .h6 {
@@ -55,28 +81,54 @@ body, p, li, a, input, select, textarea, button, label, span {
 }
 
 /* ─── HEADER ──────────────────────────────────────────── */
+
+/* Outer shell — transparent so page bg shows through */
+.shopify-section-group-header-group,
+.header-group,
 header-component,
-.header,
-.header-section,
-.header-group {
-  background: var(--bp-bg) !important;
+.header-section {
+  background: transparent !important;
   border: none !important;
-  border-bottom: 1px solid var(--bp-border) !important;
   box-shadow: none !important;
 }
 
-/* Transparent header mode */
-header-component[transparent],
-.header[transparent] {
-  background: transparent !important;
-  border-bottom-color: transparent !important;
+/* Header rows — styled as compact white card on left */
+.header__row--top,
+.header__row--bottom,
+.header__row {
+  background: #ffffff !important;
+  width: fit-content !important;
+  min-width: 0 !important;
+  border: 1px solid var(--bp-border) !important;
+  border-bottom: none !important;
 }
 
-header-component.is-scrolled,
-.header.is-scrolled {
-  background: var(--bp-bg) !important;
-  border-bottom-color: var(--bp-border) !important;
+/* Last row gets bottom border */
+.header__row:last-of-type {
+  border-bottom: 1px solid var(--bp-border) !important;
+}
 
+/* Remove full-width stretch */
+.header__columns {
+  width: auto !important;
+  max-width: none !important;
+}
+
+/* Header inner spacing */
+.header__row .header__columns {
+  padding: 0.5rem 1rem !important;
+}
+
+/* Transparent mode — just remove borders */
+header-component[transparent] .header__row {
+  background: transparent !important;
+  border-color: transparent !important;
+}
+
+/* Scrolled state — keep white */
+header-component.is-scrolled .header__row {
+  background: #ffffff !important;
+  border-color: var(--bp-border) !important;
 }
 
 /* Logo */
@@ -579,56 +631,123 @@ header-component.is-scrolled,
 .media-with-content a.link:hover { opacity: 0.5 !important; }
 
 /* ─── FOOTER ──────────────────────────────────────────── */
-.footer-content,
-footer .section {
+footer,
+.section-background.color-scheme-1 {
   background: var(--bp-bg) !important;
+}
+
+.footer-content,
+footer .section .footer-content {
+  background: var(--bp-bg) !important;
+  border: none !important;
   border-top: 1px solid var(--bp-border) !important;
   display: flex !important;
   flex-direction: row !important;
   align-items: center !important;
   justify-content: space-between !important;
-  padding: 1.5rem 3rem !important;
-  gap: 2rem !important;
-  flex-wrap: wrap !important;
+  padding: 1rem 2.5rem !important;
+  gap: 1rem !important;
+  flex-wrap: nowrap !important;
+  /* Remove default grid layout */
+  grid-template-columns: unset !important;
 }
 
+/* All children in a row */
 .footer-content > * {
   border: none !important;
   padding: 0 !important;
   min-height: 0 !important;
+  background: transparent !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 0 !important;
+  flex: none !important;
 }
 
+/* First block (left side: policy links) */
+.footer-content > *:first-child {
+  margin-right: auto !important;
+}
+
+/* Last block (right side: email + social) */
+.footer-content > *:last-child {
+  margin-left: auto !important;
+}
+
+/* Hide all headings — Bécane footer has no headings */
 .footer-content h2,
 .footer-content h3,
+.footer-content h4,
+.footer-content .h2,
 .footer-content .h3,
-.footer-content .menu__heading__default {
-  display: none !important; /* Bécane footer has no column headings */
+.footer-content .menu__heading__default,
+.footer-content .footer-block__heading {
+  display: none !important;
 }
 
+/* All footer links and text */
 .footer-content a,
+.footer-content li a,
 .footer-content p,
-footer a {
-  font-family: var(--bp-font) !important;
-  font-size: 0.7rem !important;
+footer a,
+footer li a {
+  font-family: var(--bp-mono) !important;
+  font-size: 0.58rem !important;
   font-weight: 400 !important;
-  letter-spacing: 0.08em !important;
+  letter-spacing: 0.1em !important;
   text-transform: uppercase !important;
   color: var(--bp-black) !important;
   text-decoration: none !important;
-  margin: 0 1rem 0 0 !important;
   transition: opacity 0.2s ease !important;
+  white-space: nowrap !important;
 }
+
+/* Spacing between footer links */
+.footer-content li {
+  display: inline !important;
+  list-style: none !important;
+}
+
+.footer-content li + li::before {
+  content: '  ';
+  margin: 0 0.6rem !important;
+  color: var(--bp-border) !important;
+}
+
+.footer-content ul,
+.footer-content nav ul {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 1.5rem !important;
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.footer-content li + li::before { display: none !important; }
 
 .footer-content a:hover,
 footer a:hover { opacity: 0.5 !important; }
 
+/* Footer copyright text */
+.footer-content [class*="copyright"],
+.footer__copyright {
+  display: none !important;
+}
+
 @media screen and (max-width: 749px) {
-  .footer-content,
-  footer .section {
+  .footer-content {
     flex-direction: column !important;
     align-items: flex-start !important;
-    padding: 2rem 1.5rem !important;
-    gap: 1rem !important;
+    padding: 1rem 1.5rem !important;
+    gap: 0.75rem !important;
+  }
+
+  .footer-content > *:first-child,
+  .footer-content > *:last-child {
+    margin: 0 !important;
   }
 }
 
