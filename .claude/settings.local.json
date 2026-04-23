@@ -9,7 +9,15 @@
       "Bash(git add *)",
       "Bash(git commit *)",
       "WebFetch(domain:fs6bbf-d1.myshopify.com)",
-      "Bash(shopify theme *)"
+      "Bash(shopify theme *)",
+      "mcp__shopify__get-products",
+      "Bash(curl -s 'https://fs6bbf-d1.myshopify.com/admin/api/2024-10/products.json?limit=50' -H 'X-Shopify-Access-Token: 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')",
+      "Bash(python3 -c ' *)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(d.get\\('access_token','ERROR:'+str\\(d\\)\\)\\)\")",
+      "Bash(curl -s 'https://fs6bbf-d1.myshopify.com/admin/api/2024-10/products.json?limit=250' -H 'X-Shopify-Access-Token: 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')",
+      "Bash(curl -s https://fs6bbf-d1.myshopify.com/admin/api/2024-10/shop.json -H 'X-Shopify-Access-Token: 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')",
+      "Bash(curl -s https://fs6bbf-d1.myshopify.com/admin/api/2024-10/products/count.json -H 'X-Shopify-Access-Token: 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')",
+      "Bash(curl -s https://fs6bbf-d1.myshopify.com/admin/api/2024-10/products.json -H 'X-Shopify-Access-Token: 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')"
     ]
   }
 }
