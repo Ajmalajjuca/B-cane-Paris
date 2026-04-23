@@ -82,9 +82,12 @@
     display: none !important;
   }
 
-  /* All footer links */
+  /* All footer text and links */
   .footer-content a,
-  .footer-content li a {
+  .footer-content li a,
+  .footer-content p,
+  .footer-content span,
+  .footer-content div {
     font-family: 'Space Mono', monospace !important;
     font-size: 0.58rem !important;
     font-weight: 400 !important;
@@ -93,9 +96,9 @@
     color: #0a0a0a !important;
     text-decoration: none !important;
     white-space: nowrap !important;
-    transition: opacity 0.2s ease !important;
   }
 
+  .footer-content a { transition: opacity 0.2s ease !important; }
   .footer-content a:hover { opacity: 0.5 !important; }
 
   /* Nav lists horizontal */
