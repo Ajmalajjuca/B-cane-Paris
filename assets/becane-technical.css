@@ -132,7 +132,7 @@ header-component.is-scrolled,
   overflow: hidden !important;
   border: none !important;
   min-height: 100svh !important;
-  background: var(--bp-white) !important;
+  background: #0a0a0a !important; /* dark fallback when no image */
 }
 
 .hero__media-wrapper img,
@@ -746,4 +746,177 @@ hr,
   font-family: var(--bp-mono) !important;
   font-size: 0.7rem !important;
   letter-spacing: 0.08em !important;
+}
+
+/* ─── HOMEPAGE COLLECTION-INDEX HERO ─────────────────────── */
+
+/* Hero full-screen — no padding-top so content hugs bottom */
+.hero.section--full-width {
+  margin: 0 !important;
+}
+
+/* When no image is set, hero shows dark fallback */
+.hero:not(:has(.hero__media-wrapper img)):not(:has(.hero__media-wrapper video)) {
+  background: #111 !important;
+}
+
+/* Collection label above heading — mono, muted white */
+.hero p:first-of-type,
+.hero__content p:first-child {
+  font-family: var(--bp-mono) !important;
+  font-size: 0.62rem !important;
+  letter-spacing: 0.2em !important;
+  text-transform: uppercase !important;
+  color: rgba(255,255,255,0.55) !important;
+  font-weight: 400 !important;
+  margin: 0 0 0.4rem 0 !important;
+}
+
+/* Hero button — Bécane style: text link, not filled button */
+.hero .button-secondary,
+.hero a.button-secondary {
+  background: transparent !important;
+  border: none !important;
+  border-bottom: 1px solid rgba(255,255,255,0.6) !important;
+  color: rgba(255,255,255,0.85) !important;
+  padding: 0 0 3px 0 !important;
+  font-size: 0.68rem !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.2em !important;
+  text-transform: uppercase !important;
+  transition: opacity 0.2s ease !important;
+  display: inline-block !important;
+  margin-top: 0.25rem !important;
+}
+
+.hero .button-secondary:hover,
+.hero a.button-secondary:hover {
+  opacity: 0.6 !important;
+}
+
+/* Product section — minimal top border separator */
+.section-product-list,
+.product-list-section {
+  border-top: 1px solid var(--bp-border) !important;
+}
+
+/* Product list header — "All Products" label style */
+.section-resource-list__header,
+[class*="product-list"] > * > .content {
+  border-bottom: 1px solid var(--bp-border) !important;
+  padding-bottom: 1.25rem !important;
+  margin-bottom: 0 !important;
+}
+
+/* Product count style when shown */
+.section-resource-list__header p,
+.section-resource-list__header .rte {
+  font-family: var(--bp-font) !important;
+  font-size: 0.72rem !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.14em !important;
+  text-transform: uppercase !important;
+  color: var(--bp-black) !important;
+}
+
+/* "View all" link in product section header */
+.section-resource-list__header a,
+.product-list-header a {
+  font-family: var(--bp-mono) !important;
+  font-size: 0.62rem !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  color: var(--bp-muted) !important;
+  text-decoration: none !important;
+  border-bottom: 1px solid var(--bp-border) !important;
+  padding-bottom: 1px !important;
+}
+
+/* ─── PRODUCT PAGE — EDITORIAL LOOK ──────────────────────── */
+
+/* Full-bleed product image on left, details right */
+@media screen and (min-width: 990px) {
+  .product-information {
+    padding: 0 !important;
+  }
+
+  /* Product media panel — flush left */
+  .product-information__media,
+  .product-media-container {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Product details panel — generous padding */
+  .product-information__details,
+  .product-details-container {
+    padding: 3rem 3.5rem !important;
+  }
+}
+
+/* Product image — cover, no border, no radius */
+.product-information .product-media,
+.product-media-modal__content img,
+.product__media img {
+  object-fit: cover !important;
+  width: 100% !important;
+  height: 100% !important;
+  aspect-ratio: auto !important;
+}
+
+/* Product description text */
+.product-description,
+.product__description {
+  font-family: var(--bp-font) !important;
+  font-size: 0.82rem !important;
+  font-weight: 400 !important;
+  line-height: 1.75 !important;
+  color: var(--bp-black) !important;
+  letter-spacing: 0.01em !important;
+  margin-top: 1.5rem !important;
+  max-width: 400px !important;
+}
+
+/* Model info line — like "Size 178cm, Top S" */
+.product-size-info,
+.product__model-info {
+  font-family: var(--bp-mono) !important;
+  font-size: 0.6rem !important;
+  color: var(--bp-muted) !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  margin-bottom: 1.5rem !important;
+}
+
+/* Accordion / expandable sections on product page */
+.accordion,
+.product-accordion {
+  border-top: 1px solid var(--bp-border) !important;
+}
+
+.accordion summary,
+.accordion__title {
+  font-family: var(--bp-font) !important;
+  font-size: 0.7rem !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  color: var(--bp-black) !important;
+  padding: 1rem 0 !important;
+  border-bottom: 1px solid var(--bp-border) !important;
+  cursor: pointer !important;
+  list-style: none !important;
+}
+
+/* ─── SCROLL REVEAL ───────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.7s var(--bp-ease), transform 0.7s var(--bp-ease);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
 }
